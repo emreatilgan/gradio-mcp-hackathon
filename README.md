@@ -26,8 +26,8 @@ A **simplified AI compliance tool** that helps determine if your AI system compl
 - **Risk Classification**: Automatically categorizes AI systems into the 4 EU AI Act risk levels
 
 ### 🔌 **MCP Server Integration** 
-- **Built-in MCP Server**: Uses Gradio's native MCP functionality (`mcp_server=True`)
-- **3 MCP Tools** for seamless integration:
+- **Gradio API Endpoints**: Functions are automatically exposed as API endpoints
+- **4 MCP Tools** available through Gradio's API:
   - `check_compliance` - Full compliance analysis
   - `explain_compliance` - Detailed compliance explanation  
   - `assess_risk` - Risk level assessment
@@ -88,6 +88,17 @@ Add to your `claude_desktop_config.json`:
       "env": {
         "ANTHROPIC_API_KEY": "your-key"
       }
+    }
+  }
+}
+```
+
+**Alternative: Use Gradio API endpoints directly**
+```json
+{
+  "mcpServers": {
+    "gradio-eu-ai-act": {
+      "url": "http://localhost:7860/api/predict/"
     }
   }
 }

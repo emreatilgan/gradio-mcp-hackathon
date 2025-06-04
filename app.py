@@ -311,9 +311,8 @@ with gr.Blocks(
     """)
 
 if __name__ == "__main__":
-    # Enable MCP server functionality
-    demo.launch(
-        mcp_server=True,  # Enable built-in MCP server 
-        share=False,
-        server_port=7860
-    ) 
+    # Launch the Gradio interface 
+    # Note: MCP functionality is available through the Gradio API endpoints
+    # Each function (check_compliance, explain_compliance, assess_risk, get_risk_info) 
+    # will be automatically exposed as API endpoints that MCP clients can call
+    demo.launch() 

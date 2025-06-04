@@ -1,5 +1,0 @@
-# EU AI Act Compliance Checker - Environment Variables
-# Copy this file to .env and fill in your API key
-
-# Required: Anthropic API key for Claude
-ANTHROPIC_API_KEY=your_anthropic_api_key_here 

@@ -1,5 +1,5 @@
 # Essential dependencies for EU AI Act Compliance Checker - Hackathon Version
-gradio>=4.0.0
+gradio[mcp]
 anthropic>=0.3.0
 python-dotenv>=1.0.0
 PyPDF2>=3.0.0 
