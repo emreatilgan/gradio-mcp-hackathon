@@ -23,7 +23,6 @@ def test_requirements():
     
     # Test 2: Check LLM API keys
     api_keys = {
-        "NEBIUS_API_KEY": os.getenv("NEBIUS_API_KEY"),
         "ANTHROPIC_API_KEY": os.getenv("ANTHROPIC_API_KEY"), 
         "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY")
     }
@@ -34,7 +33,7 @@ def test_requirements():
         print(f"✅ LLM API keys found: {', '.join(available_keys)}")
     else:
         print("❌ No LLM API keys found")
-        print("   Please set at least one: NEBIUS_API_KEY, ANTHROPIC_API_KEY, or OPENAI_API_KEY")
+        print("   Please set at least one: ANTHROPIC_API_KEY or OPENAI_API_KEY")
         return False
     
     # Test 3: Check Python dependencies

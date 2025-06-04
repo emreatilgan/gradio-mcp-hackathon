@@ -12,11 +12,45 @@ tags: [mcp-server-track, eu-ai-act, compliance, legal-tech, ai-regulation]
 
 # 🇪🇺 EU AI Act Compliance Checker
 
-**MCP Server & Gradio App for EU AI Act Compliance Analysis**
+> **Advanced AI compliance analysis tool with Gradio interface and MCP server integration**
+
+[![Gradio](https://img.shields.io/badge/Gradio-4.0+-orange)](https://gradio.app/)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue)](https://python.org/)
+[![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-2024/1689-green)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689)
+[![MCP](https://img.shields.io/badge/MCP-Compatible-purple)](https://github.com/modelcontextprotocol)
+
+**🏆 Built for the Gradio Agents & MCP Hackathon 2025**
+
+## 🎯 What This Does
+
+This tool helps you determine if your AI system complies with the **EU AI Act** (Regulation 2024/1689) by:
+
+- **🔍 Analyzing AI scenarios** against the 170-page official regulation
+- **⚖️ Classifying risk levels** (Unacceptable, High, Limited, Minimal)
+- **📋 Providing compliance recommendations** with specific requirements
+- **📚 Citing relevant articles** from the original EU AI Act document
+- **🔗 Serving as an MCP server** for integration with Claude Desktop, Cursor, and other MCP clients
+
+### Key Features
+
+- **📄 Enhanced PDF Processing**: 
+  - **Anthropic Direct Upload**: Uploads EU AI Act PDF directly to Anthropic's Files API for full document analysis
+  - **Intelligent Fallback**: Falls back to semantic search if PDF upload isn't available
+  - **Hybrid Analysis**: Combines full PDF analysis with targeted article retrieval
+- **🧠 Intelligent Analysis**: Uses semantic search + LLM reasoning for precise compliance assessment
+- **⚡ Real-time Results**: Get compliance analysis in seconds
+- **🔌 MCP Integration**: Works as a server for AI coding assistants
+- **🎨 Beautiful UI**: Clean Gradio interface for easy interaction
 
 ## 🎯 Project Overview
 
 The EU AI Act Compliance Checker is a comprehensive tool that analyzes AI use case scenarios for compliance with the European Union's AI Act regulation. This project serves both as a standalone Gradio web application and as an MCP (Model Context Protocol) server that can be integrated into various AI development workflows.
+
+**🚀 NEW: Enhanced Anthropic Integration**
+- Automatically uploads the EU AI Act PDF to Anthropic's Files API
+- Leverages Claude's native PDF processing capabilities for comprehensive analysis
+- Provides more accurate citations and regulatory references
+- Falls back to semantic search for maximum compatibility
 
 ### 🏆 Hackathon Submission
 
@@ -29,9 +63,10 @@ This project demonstrates how Gradio apps can serve as powerful MCP servers, ext
 
 ### 🔍 **Comprehensive Compliance Analysis**
 - **Risk Classification**: Automatically categorizes AI systems into EU AI Act risk levels (Unacceptable, High, Limited, Minimal)
-- **Compliance Assessment**: Determines whether an AI system meets regulatory requirements
+- **Enhanced PDF Analysis**: When using Anthropic, uploads and analyzes the complete 170-page EU AI Act document
+- **Compliance Assessment**: Determines whether an AI system meets regulatory requirements with detailed regulatory citations
 - **Article Retrieval**: Finds and cites relevant EU AI Act articles for any scenario
-- **Smart Recommendations**: Provides actionable compliance guidance
+- **Smart Recommendations**: Provides actionable compliance guidance based on actual regulatory text
 
 ### 🤖 **MCP Server Integration**
 - **5 MCP Tools** for seamless integration with AI assistants
@@ -39,13 +74,14 @@ This project demonstrates how Gradio apps can serve as powerful MCP servers, ext
 - **Structured Responses** in markdown format for easy consumption
 
 ### 📚 **Intelligent Document Processing**
+- **Anthropic PDF Upload**: Automatically uploads EU AI Act PDF to Anthropic's Files API for comprehensive analysis
 - **PDF Processing**: Extracts and processes the full 170-page EU AI Act document
 - **Semantic Search**: Uses embeddings for contextually relevant article retrieval
+- **Hybrid Approach**: Combines full PDF analysis with targeted semantic search
 - **Fallback System**: Works even without the full document using curated key articles
 
 ### 🧠 **Multi-LLM Support**
-- **Nebius API** integration (using hackathon credits)
-- **Anthropic Claude** support
+- **Anthropic Claude** as primary provider with enhanced PDF capabilities
 - **OpenAI GPT** compatibility
 - **Rule-based Fallback** when LLMs aren't available
 
@@ -60,7 +96,7 @@ This project demonstrates how Gradio apps can serve as powerful MCP servers, ext
          ▼                       ▼                       ▼
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │  Compliance     │    │   LLM APIs       │    │  Vector Search  │
-│  Checker        │◄──►│  (Nebius/Claude) │    │  (FAISS)        │
+│  Checker        │◄──►│  (Anthropic)     │    │  (FAISS)        │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
@@ -109,7 +145,7 @@ This project demonstrates how Gradio apps can serve as powerful MCP servers, ext
 ### Prerequisites
 - Python 3.8+
 - **EU AI Act PDF document (REQUIRED)** - Place as `eu_ai_act.pdf` in project root
-- **At least one LLM API key** (Nebius, Anthropic, or OpenAI)
+- **At least one LLM API key** (Anthropic or OpenAI)
 - Required Python dependencies
 
 ### Quick Start
@@ -130,7 +166,6 @@ pip install -r requirements.txt
 3. **Set up API Keys (REQUIRED)**
 ```bash
 # At least one of these is required:
-export NEBIUS_API_KEY="your-nebius-key"
 export ANTHROPIC_API_KEY="your-anthropic-key"
 export OPENAI_API_KEY="your-openai-key"
 ```
@@ -154,7 +189,7 @@ Add to your `claude_desktop_config.json`:
       "command": "python",
       "args": ["/path/to/your/app.py", "--mcp"],
       "env": {
-        "NEBIUS_API_KEY": "your-key"
+        "ANTHROPIC_API_KEY": "your-key"
       }
     }
   }
@@ -221,12 +256,6 @@ The project is designed to leverage Modal Labs credits for:
 - Scalable PDF parsing
 - High-performance vector operations
 
-### Nebius API Integration
-Uses Nebius credits for:
-- LLM-powered scenario analysis
-- Intelligent risk classification
-- Natural language compliance reasoning
-
 ## 📈 Performance & Scalability
 
 - **Response Time**: <3 seconds for most queries
@@ -284,7 +313,7 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 - **Gradio Team** for the amazing MCP integration capabilities
 - **EU AI Act Working Group** for the comprehensive regulation framework
-- **Modal Labs & Nebius** for providing hackathon credits
+- **Modal Labs** for providing hackathon credits
 - **Hugging Face** for hosting and supporting the hackathon
 
 ---

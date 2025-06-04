@@ -1,18 +1,42 @@
 import gradio as gr
 import json
 import os
+import logging
 from typing import Dict, List, Optional, Tuple
 import asyncio
 from datetime import datetime
+
+# Configure logging to show detailed information including LLM interactions
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),  # Console output
+        logging.FileHandler('compliance_checker.log')  # Also log to file
+    ]
+)
+
+# Set up logger for this module
+logger = logging.getLogger(__name__)
+logger.info("EU AI Act Compliance Checker starting up...")
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    logger.info("✅ Environment variables loaded from .env file")
+except ImportError:
+    logger.warning("⚠️  python-dotenv not available, using system environment variables only")
 
 # Import MCP components
 try:
     from mcp import ClientSession, StdioServerParameters
     from mcp.client.stdio import stdio_client
     MCP_AVAILABLE = True
+    logger.info("MCP components loaded successfully")
 except ImportError:
     MCP_AVAILABLE = False
-    print("MCP not available, running in standalone mode")
+    logger.warning("MCP not available, running in standalone mode")
 
 # Import our custom modules
 from document_processor import EUAIActProcessor
@@ -39,7 +63,7 @@ class EUAIActComplianceApp:
                 await self.initialize()
             except Exception as e:
                 return {
-                    "error": f"Setup failed: {str(e)}. Please ensure you have:\n1. The original EU AI Act PDF as 'eu_ai_act.pdf'\n2. At least one LLM API key set (NEBIUS_API_KEY, ANTHROPIC_API_KEY, or OPENAI_API_KEY)\n3. Required dependencies installed (pip install -r requirements.txt)",
+                    "error": f"Setup failed: {str(e)}. Please ensure you have:\n1. The original EU AI Act PDF as 'eu_ai_act.pdf'\n2. At least one LLM API key set (ANTHROPIC_API_KEY or OPENAI_API_KEY)\n3. Required dependencies installed (pip install -r requirements.txt)",
                     "compliance": None,
                     "risk_level": None,
                     "articles": [],
@@ -82,17 +106,20 @@ def format_compliance_result(result: Dict) -> Tuple[str, str, str, str]:
             ""
         )
     
+    # Analysis method indicator
+    analysis_method = result.get("analysis_method", "semantic_search")
+    method_badge = "🤖 **Enhanced PDF Analysis**" if analysis_method == "anthropic_pdf" else "🔍 **Semantic Search Analysis**"
+    
     # Main compliance result
     compliance_status = result.get("compliance", {})
     is_compliant = compliance_status.get("compliant", False)
-    confidence = compliance_status.get("confidence", 0)
     reasoning = compliance_status.get("reasoning", "")
     
     status_emoji = "✅" if is_compliant else "⚠️"
     compliance_html = f"""
     <div style="padding: 20px; border-radius: 10px; background-color: {'#d4edda' if is_compliant else '#fff3cd'};">
+        <div style="margin-bottom: 10px;">{method_badge}</div>
         <h3>{status_emoji} Compliance Status: {'COMPLIANT' if is_compliant else 'NON-COMPLIANT'}</h3>
-        <p><strong>Confidence:</strong> {confidence:.1%}</p>
         <p><strong>Analysis:</strong> {reasoning}</p>
     </div>
     """
@@ -101,6 +128,10 @@ def format_compliance_result(result: Dict) -> Tuple[str, str, str, str]:
     risk_level = result.get("risk_level", {})
     risk_category = risk_level.get("category", "Unknown")
     risk_explanation = risk_level.get("explanation", "")
+    
+    # Enhanced details for PDF analysis
+    cited_articles = risk_level.get("cited_articles", [])
+    regulatory_basis = risk_level.get("regulatory_basis", "")
     
     risk_colors = {
         "Minimal": "#d4edda",
@@ -113,6 +144,8 @@ def format_compliance_result(result: Dict) -> Tuple[str, str, str, str]:
     <div style="padding: 15px; border-radius: 8px; background-color: {risk_colors.get(risk_category, '#f8f9fa')};">
         <h4>Risk Level: {risk_category}</h4>
         <p>{risk_explanation}</p>
+        {f'<p><strong>Cited Articles:</strong> {", ".join(cited_articles)}</p>' if cited_articles else ''}
+        {f'<p><strong>Regulatory Basis:</strong> {regulatory_basis}</p>' if regulatory_basis else ''}
     </div>
     """
     
@@ -160,7 +193,12 @@ def create_interface():
         theme=gr.themes.Soft(),
         css="""
         .gradio-container {
-            max-width: 1200px !important;
+            max-width: 1400px !important;
+        }
+        .results-column {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
         }
         """
     ) as demo:
@@ -170,25 +208,40 @@ def create_interface():
         
         **Analyze your AI use case scenarios for compliance with the EU AI Act**
         
-        **⚠️ REQUIREMENTS:**
-        - Original EU AI Act PDF (`eu_ai_act.pdf`) in project root
-        - LLM API key (Nebius, Anthropic, or OpenAI)
-        
         This tool helps you understand:
-        - Whether your AI system complies with EU AI Act requirements
-        - Risk classification of your AI system
+        - Whether your scenario complies with EU AI Act requirements
+        - Risk classification of your scenario
         - Relevant articles and regulations
         - Compliance recommendations
+        """)
+        
+        # MCP Integration section at the top
+        gr.Markdown("""
+        ---
+        ### 🎯 MCP Integration
+        
+        This app also serves as an **MCP Server** that can be integrated into:
+        - Claude Desktop
+        - Cursor IDE  
+        - Any MCP-compatible client
+        
+        **Available MCP Tools:**
+        - `check_eu_ai_compliance`
+        - `get_compliance_articles`
+        - `assess_ai_risk_level`
+        - `get_compliance_recommendations`
         
         ---
         """)
         
+        # Main content area: Input on left, Results on right
         with gr.Row():
-            with gr.Column(scale=2):
+            # Input section
+            with gr.Column(scale=1):
                 scenario_input = gr.Textbox(
                     label="🔍 Describe your AI use case scenario",
                     placeholder="Example: We are developing a facial recognition system for employee attendance tracking in our office building...",
-                    lines=5
+                    lines=8
                 )
                 
                 analyze_btn = gr.Button(
@@ -209,32 +262,11 @@ def create_interface():
                     label="📝 Example Scenarios"
                 )
             
-            with gr.Column(scale=1):
-                gr.Markdown("""
-                ### 🎯 MCP Integration
-                
-                This app also serves as an **MCP Server** that can be integrated into:
-                - Claude Desktop
-                - Cursor IDE  
-                - Any MCP-compatible client
-                
-                **Available MCP Tools:**
-                - `check_eu_ai_compliance`
-                - `get_compliance_articles`
-                - `assess_ai_risk_level`
-                - `get_compliance_recommendations`
-                """)
-        
-        gr.Markdown("---")
-        
-        # Results section
-        with gr.Row():
-            with gr.Column():
-                compliance_result = gr.HTML(label="📊 Compliance Assessment")
+            # Results section on the right
+            with gr.Column(scale=1, elem_classes=["results-column"]):
+                gr.Markdown("### 📊 Analysis Results")
+                compliance_result = gr.HTML(label="Compliance Assessment")
                 risk_result = gr.HTML(label="⚖️ Risk Classification")
-        
-        with gr.Row():
-            with gr.Column():
                 articles_result = gr.HTML(label="📚 Relevant EU AI Act Articles")
                 recommendations_result = gr.HTML(label="💡 Compliance Recommendations")
         
@@ -250,19 +282,6 @@ def create_interface():
             inputs=[scenario_input],
             outputs=[compliance_result, risk_result, articles_result, recommendations_result]
         )
-        
-        gr.Markdown("""
-        ---
-        ### 📖 About the EU AI Act
-        
-        The EU AI Act is the world's first comprehensive AI regulation, establishing rules for AI systems based on their risk levels:
-        - **Unacceptable Risk**: Prohibited AI systems
-        - **High Risk**: Strict requirements including conformity assessments
-        - **Limited Risk**: Transparency obligations
-        - **Minimal Risk**: No specific obligations
-        
-        This tool helps you navigate these requirements for your specific use case.
-        """)
     
     return demo
 

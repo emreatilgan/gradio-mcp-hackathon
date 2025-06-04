@@ -244,12 +244,10 @@ async def _handle_compliance_check(app, arguments: Dict[str, Any]) -> CallToolRe
 
 ## Compliance Status
 **Status:** {"✅ COMPLIANT" if compliance.get("compliant") else "⚠️ NON-COMPLIANT"}
-**Confidence:** {compliance.get("confidence", 0):.1%}
 **Reasoning:** {compliance.get("reasoning", "No reasoning provided")}
 
 ## Risk Classification
 **Risk Level:** {risk_level.get("category", "Unknown")}
-**Confidence:** {risk_level.get("confidence", 0):.1%}
 **Explanation:** {risk_level.get("explanation", "No explanation provided")}
 
 ## Relevant EU AI Act Articles
@@ -348,7 +346,6 @@ async def _handle_risk_assessment(app, arguments: Dict[str, Any]) -> CallToolRes
 
 ## Risk Classification
 **Risk Level:** {risk_analysis.get("category", "Unknown")}
-**Confidence:** {risk_analysis.get("confidence", 0):.1%}
 **Explanation:** {risk_analysis.get("explanation", "No explanation provided")}
 
 ## Key Risk Factors
