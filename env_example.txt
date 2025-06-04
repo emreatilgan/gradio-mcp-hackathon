@@ -1,0 +1,26 @@
+# EU AI Act Compliance Checker - Environment Configuration
+
+# LLM API Keys (Optional - app works without these using rule-based analysis)
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Modal Labs Configuration (Optional - for cloud processing)
+MODAL_TOKEN_ID=your_modal_token_id
+MODAL_TOKEN_SECRET=your_modal_token_secret
+
+# Document Configuration
+EU_AI_ACT_PDF_PATH=eu_ai_act.pdf
+
+# Embedding Model Configuration
+EMBEDDING_MODEL=all-MiniLM-L6-v2
+CHUNK_SIZE=1000
+CHUNK_OVERLAP=200
+
+# Gradio Configuration
+GRADIO_SERVER_NAME=0.0.0.0
+GRADIO_SERVER_PORT=7860
+GRADIO_SHARE=false
+
+# Logging Configuration
+LOG_LEVEL=INFO
+LOG_FILE=compliance_checker.log 
