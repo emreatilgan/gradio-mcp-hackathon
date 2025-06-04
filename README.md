@@ -1,152 +1,49 @@
----
-title: EU AI Act Compliance Checker
-emoji: 🇪🇺
-colorFrom: blue
-colorTo: purple
-sdk: gradio
-sdk_version: "4.44.0"
-app_file: app.py
-pinned: false
-tags: [mcp-server-track, eu-ai-act, compliance, legal-tech, ai-regulation]
----
+# 🇪🇺 EU AI Act Compliance Checker - Hackathon Version
 
-# 🇪🇺 EU AI Act Compliance Checker
-
-> **Advanced AI compliance analysis tool with Gradio interface and MCP server integration**
+> **🏆 Built for Gradio Agents & MCP Hackathon 2025**  
+> **Track:** MCP Server/Tool Track  
+> **Tags:** `mcp-server-track`
 
 [![Gradio](https://img.shields.io/badge/Gradio-4.0+-orange)](https://gradio.app/)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue)](https://python.org/)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-2024/1689-green)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1689)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-purple)](https://github.com/modelcontextprotocol)
 
-**🏆 Built for the Gradio Agents & MCP Hackathon 2025**
-
 ## 🎯 What This Does
 
-This tool helps you determine if your AI system complies with the **EU AI Act** (Regulation 2024/1689) by:
+A **simplified AI compliance tool** that helps determine if your AI system complies with the **EU AI Act** by:
 
-- **🔍 Analyzing AI scenarios** against the 170-page official regulation
-- **⚖️ Classifying risk levels** (Unacceptable, High, Limited, Minimal)
-- **📋 Providing compliance recommendations** with specific requirements
-- **📚 Citing relevant articles** from the original EU AI Act document
-- **🔗 Serving as an MCP server** for integration with Claude Desktop, Cursor, and other MCP clients
-
-### Key Features
-
-- **📄 Enhanced PDF Processing**: 
-  - **Anthropic Direct Upload**: Uploads EU AI Act PDF directly to Anthropic's Files API for full document analysis
-  - **Intelligent Fallback**: Falls back to semantic search if PDF upload isn't available
-  - **Hybrid Analysis**: Combines full PDF analysis with targeted article retrieval
-- **🧠 Intelligent Analysis**: Uses semantic search + LLM reasoning for precise compliance assessment
-- **⚡ Real-time Results**: Get compliance analysis in seconds
-- **🔌 MCP Integration**: Works as a server for AI coding assistants
-- **🎨 Beautiful UI**: Clean Gradio interface for easy interaction
-
-## 🎯 Project Overview
-
-The EU AI Act Compliance Checker is a comprehensive tool that analyzes AI use case scenarios for compliance with the European Union's AI Act regulation. This project serves both as a standalone Gradio web application and as an MCP (Model Context Protocol) server that can be integrated into various AI development workflows.
-
-**🚀 NEW: Enhanced Anthropic Integration**
-- Automatically uploads the EU AI Act PDF to Anthropic's Files API
-- Leverages Claude's native PDF processing capabilities for comprehensive analysis
-- Provides more accurate citations and regulatory references
-- Falls back to semantic search for maximum compatibility
-
-### 🏆 Hackathon Submission
-
-**Track:** MCP Server/Tool Track  
-**Tags:** `mcp-server-track`
-
-This project demonstrates how Gradio apps can serve as powerful MCP servers, extending the capabilities of AI assistants like Claude Desktop and Cursor IDE with specialized compliance checking tools.
+- 🔍 **Analyzing AI scenarios** against EU AI Act requirements
+- ⚖️ **Classifying risk levels** (Unacceptable, High, Limited, Minimal)  
+- 📋 **Providing compliance guidance** with specific recommendations
+- 🔗 **Serving as an MCP server** for integration with Claude Desktop, Cursor, and other MCP clients
 
 ## ✨ Key Features
 
-### 🔍 **Comprehensive Compliance Analysis**
-- **Risk Classification**: Automatically categorizes AI systems into EU AI Act risk levels (Unacceptable, High, Limited, Minimal)
-- **Enhanced PDF Analysis**: When using Anthropic, uploads and analyzes the complete 170-page EU AI Act document
-- **Compliance Assessment**: Determines whether an AI system meets regulatory requirements with detailed regulatory citations
-- **Article Retrieval**: Finds and cites relevant EU AI Act articles for any scenario
-- **Smart Recommendations**: Provides actionable compliance guidance based on actual regulatory text
+### 🤖 **Intelligent Analysis**
+- **Anthropic Claude Integration**: Uses Claude-3.5-Sonnet for precise compliance assessment
+- **EU AI Act Knowledge**: Incorporates actual regulation text for accurate analysis
+- **Risk Classification**: Automatically categorizes AI systems into the 4 EU AI Act risk levels
 
-### 🤖 **MCP Server Integration**
-- **5 MCP Tools** for seamless integration with AI assistants
-- **Real-time Analysis** accessible from Claude Desktop, Cursor, and other MCP clients
-- **Structured Responses** in markdown format for easy consumption
+### 🔌 **MCP Server Integration** 
+- **Gradio API Endpoints**: Functions are automatically exposed as API endpoints
+- **4 MCP Tools** available through Gradio's API:
+  - `check_compliance` - Full compliance analysis
+  - `explain_compliance` - Detailed compliance explanation  
+  - `assess_risk` - Risk level assessment
+  - `get_risk_info` - EU AI Act risk categories reference
 
-### 📚 **Intelligent Document Processing**
-- **Anthropic PDF Upload**: Automatically uploads EU AI Act PDF to Anthropic's Files API for comprehensive analysis
-- **PDF Processing**: Extracts and processes the full 170-page EU AI Act document
-- **Semantic Search**: Uses embeddings for contextually relevant article retrieval
-- **Hybrid Approach**: Combines full PDF analysis with targeted semantic search
-- **Fallback System**: Works even without the full document using curated key articles
+### 🎨 **Simple Interface**
+- **Clean Gradio UI**: User-friendly web interface
+- **Real-time Analysis**: Get compliance results in seconds
+- **Visual Risk Display**: Color-coded risk level indicators
 
-### 🧠 **Multi-LLM Support**
-- **Anthropic Claude** as primary provider with enhanced PDF capabilities
-- **OpenAI GPT** compatibility
-- **Rule-based Fallback** when LLMs aren't available
-
-## 🛠️ Technical Architecture
-
-```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Gradio App    │    │   MCP Server     │    │  Document       │
-│   Interface     │◄──►│   Integration    │◄──►│  Processor      │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│  Compliance     │    │   LLM APIs       │    │  Vector Search  │
-│  Checker        │◄──►│  (Anthropic)     │    │  (FAISS)        │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-```
-
-### Core Components
-
-1. **`app.py`** - Main Gradio application with MCP server capability
-2. **`document_processor.py`** - EU AI Act document parsing and semantic search
-3. **`compliance_checker.py`** - AI scenario analysis and compliance assessment
-4. **`mcp_server.py`** - MCP server setup and tool implementations
-
-## 🚀 Available MCP Tools
-
-| Tool Name | Description | Input | Output |
-|-----------|-------------|--------|--------|
-| `check_eu_ai_compliance` | Full compliance analysis of AI scenario | `scenario: string` | Complete compliance report |
-| `get_compliance_articles` | Find relevant EU AI Act articles | `scenario: string`, `max_articles: int` | Relevant articles with citations |
-| `assess_ai_risk_level` | Classify AI system risk level | `scenario: string` | Risk classification and explanation |
-| `get_compliance_recommendations` | Get compliance guidance | `scenario: string`, `risk_level?: string` | Actionable recommendations |
-| `explain_eu_ai_act_article` | Explain specific article | `article_number: string` | Detailed article explanation |
-
-## 📊 EU AI Act Risk Categories
-
-### 🚫 **Unacceptable Risk** (Prohibited)
-- Social scoring systems
-- Subliminal manipulation
-- Real-time biometric identification in public spaces
-
-### ⚠️ **High Risk** (Strict Requirements)
-- Biometric systems
-- Critical infrastructure
-- Education & employment
-- Law enforcement
-- Healthcare applications
-
-### ⚡ **Limited Risk** (Transparency Required)
-- Chatbots & conversational AI
-- Emotion recognition
-- AI-generated content
-
-### ✅ **Minimal Risk** (No Specific Obligations)
-- AI games and filters
-- Simple recommendation systems
-
-## 🔧 Installation & Setup
+## 🛠️ Installation & Setup
 
 ### Prerequisites
 - Python 3.8+
-- **EU AI Act PDF document (REQUIRED)** - Place as `eu_ai_act.pdf` in project root
-- **At least one LLM API key** (Anthropic or OpenAI)
-- Required Python dependencies
+- **Anthropic API key** (get from [console.anthropic.com](https://console.anthropic.com))
+- **EU AI Act PDF** (place as `eu_ai_act.pdf` in project root)
 
 ### Quick Start
 
@@ -157,17 +54,17 @@ cd eu-ai-act-compliance-checker
 pip install -r requirements.txt
 ```
 
-2. **Add EU AI Act Document (REQUIRED)**
+2. **Set up API Key**
 ```bash
-# Place your 170-page EU AI Act PDF as 'eu_ai_act.pdf' in the project root
-# The app REQUIRES this original document to function
+# Copy the template and add your key
+cp env_template.txt .env
+# Edit .env and add: ANTHROPIC_API_KEY=your_key_here
 ```
 
-3. **Set up API Keys (REQUIRED)**
+3. **Add EU AI Act PDF**
 ```bash
-# At least one of these is required:
-export ANTHROPIC_API_KEY="your-anthropic-key"
-export OPENAI_API_KEY="your-openai-key"
+# Place the EU AI Act PDF as 'eu_ai_act.pdf' in the project root
+# The app will read the first 20 pages for key articles
 ```
 
 4. **Run the Application**
@@ -187,7 +84,7 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "eu-ai-act-compliance": {
       "command": "python",
-      "args": ["/path/to/your/app.py", "--mcp"],
+      "args": ["/path/to/your/app.py"],
       "env": {
         "ANTHROPIC_API_KEY": "your-key"
       }
@@ -196,128 +93,111 @@ Add to your `claude_desktop_config.json`:
 }
 ```
 
-#### Cursor IDE
+**Alternative: Use Gradio API endpoints directly**
+```json
+{
+  "mcpServers": {
+    "gradio-eu-ai-act": {
+      "url": "http://localhost:7860/api/predict/"
+    }
+  }
+}
+```
+
+#### Cursor IDE  
 1. Install MCP extension
-2. Configure server endpoint
-3. Use tools directly in your code editor
+2. Add server configuration pointing to your app.py
 
-## 💡 Usage Examples
+## 📊 EU AI Act Risk Categories
 
-### Example 1: Chatbot Compliance Check
+### 🚫 **Unacceptable Risk** (Prohibited)
+- Social scoring systems
+- Subliminal manipulation  
+- Real-time biometric identification in public spaces
+
+### ⚠️ **High Risk** (Strict Requirements)
+- Biometric systems
+- Critical infrastructure
+- Education & employment
+- Law enforcement
+- Healthcare applications
+
+### ℹ️ **Limited Risk** (Transparency Required)
+- Chatbots & conversational AI
+- Emotion recognition
+- AI-generated content
+
+### ✅ **Minimal Risk** (No Specific Obligations)
+- AI games and filters
+- Simple recommendation systems
+
+## 🚀 Available MCP Tools
+
+| Tool Name | Description | Input | Output |
+|-----------|-------------|--------|--------|
+| `check_compliance` | Full compliance analysis | `scenario: string` | Complete compliance report |
+| `explain_compliance` | Detailed compliance explanation | `scenario: string` | Detailed analysis with requirements |
+| `assess_risk` | Risk level assessment only | `scenario: string` | Risk classification and explanation |
+| `get_risk_info` | EU AI Act risk categories info | None | Risk categories reference |
+
+## 🏗️ Technical Architecture
+
 ```
-Scenario: "We're building a customer service chatbot that uses natural language processing to answer questions about our products."
-
-Result:
-✅ Risk Level: Limited
-⚠️ Compliance: Requires transparency obligations
-📋 Recommendation: Inform users they're interacting with AI
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Gradio App    │    │   Built-in MCP   │    │  Anthropic      │
+│   Interface     │◄──►│   Server         │◄──►│  Claude API     │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│  EU AI Act      │    │   MCP Tools      │    │  PDF Content    │
+│  Compliance     │    │   (4 tools)     │    │  Processing     │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-### Example 2: Facial Recognition System
-```
-Scenario: "Our company wants to implement facial recognition for employee attendance tracking."
+## 📝 Example Usage
 
-Result:
-⚠️ Risk Level: High
-❌ Compliance: Requires conformity assessment
-📋 Recommendations: CE marking, risk management, human oversight
-```
+### Web Interface
+1. Enter your AI use case scenario
+2. Click "🔍 Analyze Compliance"  
+3. Get risk level, compliance status, and recommendations
 
-### Example 3: MCP Tool Usage in Claude
-```
-User: "Is my AI-powered credit scoring system compliant with EU AI Act?"
-Claude: Let me check that for you using the EU AI Act compliance tool.
-
-[Uses check_eu_ai_compliance tool]
-
-The system indicates this is a HIGH RISK application requiring:
-- Conformity assessment with notified body
-- CE marking and EU declaration of conformity
-- Risk management system implementation
-...
+### MCP Integration
+```python
+# Available through MCP clients like Claude Desktop
+"Check if this chatbot complies with EU AI Act"
+# → Uses check_compliance tool automatically
 ```
 
-## 🎬 Demo Video
+## 🎯 Hackathon Submission
 
-[Link to demo video showing MCP server in action with Claude Desktop]
+**Track:** MCP Server/Tool Track  
+**Demo:** This Space serves as both a functional web app and MCP server
 
-*Video demonstrates:*
-- MCP tool integration with Claude Desktop
-- Real-time compliance checking
-- Article retrieval and citation
-- Risk assessment workflow
+**Key Innovation:** Demonstrates how Gradio apps can serve as powerful MCP servers using the built-in `mcp_server=True` functionality, extending AI assistants with specialized EU AI Act compliance knowledge.
 
-## 🏗️ Cloud Integration
+## 📁 Project Structure
 
-### Modal Labs Integration
-The project is designed to leverage Modal Labs credits for:
-- Heavy document processing workloads
-- Batch embedding generation
-- Scalable PDF parsing
-- High-performance vector operations
+```
+eu-ai-act-compliance-checker/
+├── app.py                    # Main application (Gradio + MCP server)
+├── requirements.txt          # Minimal dependencies
+├── env_template.txt         # Environment variables template
+├── eu_ai_act.pdf           # EU AI Act document (required)
+├── README.md               # This file
+└── hackathon.md           # Hackathon documentation
+```
 
-## 📈 Performance & Scalability
+## 🏆 Built for Hackathon
 
-- **Response Time**: <3 seconds for most queries
-- **Document Processing**: Handles 170-page PDFs efficiently
-- **Concurrent Users**: Supports multiple simultaneous MCP connections
-- **Fallback System**: Works offline with rule-based analysis
-
-## 🧪 Testing Scenarios
-
-The app includes built-in example scenarios for testing:
-
-1. **Customer Service Chatbot** (Limited Risk)
-2. **Resume Screening AI** (High Risk)
-3. **Credit Scoring System** (High Risk)
-4. **Emotion Detection in Retail** (Limited Risk)
-5. **Medical Diagnosis Assistant** (High Risk)
-
-## 🏆 Why This Project Wins
-
-### **Innovation** 🚀
-- First-of-its-kind EU AI Act compliance checker with MCP integration
-- Demonstrates the power of Gradio as both UI and MCP server
-- Real-world legal tech application with immediate utility
-
-### **Technical Excellence** 💻
-- Robust multi-LLM architecture with intelligent fallbacks
-- Sophisticated document processing and semantic search
-- Production-ready MCP server implementation
-
-### **Impact** 🌍
-- Addresses critical need for EU AI Act compliance guidance
-- Saves legal and development teams countless hours
-- Democratizes access to complex regulatory analysis
-
-### **Community Value** 👥
-- Open source implementation others can build upon
-- Educational resource for understanding EU AI Act
-- Template for building regulatory compliance tools
-
-## 🤝 Contributing
-
-We welcome contributions! Please see `CONTRIBUTING.md` for guidelines.
-
-### Development Roadmap
-- [ ] Support for additional languages
-- [ ] Integration with more LLM providers
-- [ ] Advanced reporting features
-- [ ] Mobile-responsive interface improvements
-
-## 📄 License
-
-This project is licensed under the MIT License - see the `LICENSE` file for details.
-
-## 🙏 Acknowledgments
-
-- **Gradio Team** for the amazing MCP integration capabilities
-- **EU AI Act Working Group** for the comprehensive regulation framework
-- **Modal Labs** for providing hackathon credits
-- **Hugging Face** for hosting and supporting the hackathon
+This simplified version focuses on:
+- ✅ **Core functionality** - EU AI Act compliance checking
+- ✅ **MCP integration** - Using Gradio's built-in MCP server
+- ✅ **Anthropic API** - Leveraging Claude for analysis
+- ✅ **Simple setup** - Minimal dependencies and configuration
+- ✅ **Hackathon ready** - Quick to deploy and demonstrate
 
 ---
 
-**Built with ❤️ for the Gradio Agents & MCP Hackathon 2025**
-
-*Making AI compliance accessible to everyone* 🌟 
+**🎊 Gradio Agents & MCP Hackathon 2025** | **MCP Server Track**  
+*Making EU AI Act compliance accessible through AI assistants!* 
