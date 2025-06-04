@@ -95,13 +95,12 @@ class EUAIActComplianceApp:
 # Initialize the app
 app = EUAIActComplianceApp()
 
-def format_compliance_result(result: Dict) -> Tuple[str, str, str, str]:
+def format_compliance_result(result: Dict) -> Tuple[str, str, str]:
     """Format the compliance result for Gradio interface"""
     
     if result.get("error"):
         return (
             f"❌ **Error:** {result['error']}", 
-            "", 
             "", 
             ""
         )
@@ -149,21 +148,6 @@ def format_compliance_result(result: Dict) -> Tuple[str, str, str, str]:
     </div>
     """
     
-    # Relevant articles
-    articles = result.get("articles", [])
-    articles_html = ""
-    if articles:
-        for article in articles[:5]:  # Show top 5 most relevant
-            articles_html += f"""
-            <div style="margin-bottom: 15px; padding: 10px; border-left: 3px solid #007bff; background-color: #f8f9fa;">
-                <h5>Article {article.get('number', 'N/A')}: {article.get('title', 'Untitled')}</h5>
-                <p><strong>Relevance:</strong> {article.get('relevance_score', 0):.1%}</p>
-                <p>{article.get('excerpt', '')}</p>
-            </div>
-            """
-    else:
-        articles_html = "<p>No specific articles identified for this scenario.</p>"
-    
     # Recommendations
     recommendations = result.get("recommendations", [])
     recommendations_html = ""
@@ -175,7 +159,7 @@ def format_compliance_result(result: Dict) -> Tuple[str, str, str, str]:
     else:
         recommendations_html = "<p>No specific recommendations available.</p>"
     
-    return compliance_html, risk_html, articles_html, recommendations_html
+    return compliance_html, risk_html, recommendations_html
 
 async def process_scenario(scenario: str):
     """Process the scenario and return formatted results"""
@@ -267,20 +251,19 @@ def create_interface():
                 gr.Markdown("### 📊 Analysis Results")
                 compliance_result = gr.HTML(label="Compliance Assessment")
                 risk_result = gr.HTML(label="⚖️ Risk Classification")
-                articles_result = gr.HTML(label="📚 Relevant EU AI Act Articles")
                 recommendations_result = gr.HTML(label="💡 Compliance Recommendations")
         
         # Event handlers
         analyze_btn.click(
             fn=sync_process_scenario,
             inputs=[scenario_input],
-            outputs=[compliance_result, risk_result, articles_result, recommendations_result]
+            outputs=[compliance_result, risk_result, recommendations_result]
         )
         
         scenario_input.submit(
             fn=sync_process_scenario,
             inputs=[scenario_input],
-            outputs=[compliance_result, risk_result, articles_result, recommendations_result]
+            outputs=[compliance_result, risk_result, recommendations_result]
         )
     
     return demo
